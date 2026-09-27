@@ -15,18 +15,18 @@ class FinanceRetriever:
         subscriptions = sub_res.scalars().all()
 
         return {
-            "current_month": analytics.current_month,
-            "monthly_budget_target": f"₹{analytics.monthly_budget_target:,.2f}",
-            "total_expenses_this_month": f"₹{analytics.total_expenses:,.2f}",
-            "remaining_budget": f"₹{analytics.remaining_budget:,.2f}",
+            "current_month": analytics.period,
+            "monthly_budget_target": f"₹{float(analytics.monthly_budget_target):,.2f}",
+            "total_expenses_this_month": f"₹{float(analytics.total_expenses):,.2f}",
+            "remaining_budget": f"₹{float(analytics.remaining_budget):,.2f}",
             "budget_used_percentage": f"{analytics.budget_used_percentage}%",
             "is_over_budget": analytics.is_over_budget,
-            "average_daily_burn_rate": f"₹{analytics.burn_rate_per_day:,.2f}/day",
-            "projected_month_end_expense": f"₹{analytics.projected_month_end_expense:,.2f}",
+            "average_daily_burn_rate": f"₹{float(analytics.burn_rate_per_day):,.2f}/day",
+            "projected_month_end_expense": f"₹{float(analytics.projected_month_end_expense):,.2f}",
             "top_spending_categories": [
                 {
                     "category": c.category_name,
-                    "spent": f"₹{c.amount:,.2f}",
+                    "spent": f"₹{float(c.amount):,.2f}",
                     "percentage": f"{c.percentage}%"
                 }
                 for c in analytics.top_categories
@@ -34,8 +34,8 @@ class FinanceRetriever:
             "active_subscriptions": [
                 {
                     "name": s.name,
-                    "amount": f"₹{s.amount:,.2f}",
-                    "cycle": s.billing_cycle,
+                    "amount": f"₹{float(s.amount):,.2f}",
+                    "cycle": s.billing_cycle.value if hasattr(s.billing_cycle, "value") else str(s.billing_cycle),
                     "next_date": s.next_billing_date.strftime("%Y-%m-%d")
                 }
                 for s in subscriptions
@@ -43,10 +43,10 @@ class FinanceRetriever:
             "recent_transactions": [
                 {
                     "title": t.title,
-                    "amount": f"₹{t.amount:,.2f}",
-                    "type": t.type.value,
+                    "amount": f"₹{float(t.amount):,.2f}",
+                    "type": (t.transaction_type.value if hasattr(t.transaction_type, "value") else str(t.transaction_type)) if t.transaction_type else "EXPENSE",
                     "category": t.category_name,
-                    "date": t.date.strftime("%Y-%m-%d")
+                    "date": t.date.strftime("%Y-%m-%d") if t.date else ""
                 }
                 for t in analytics.recent_transactions[:6]
             ]
