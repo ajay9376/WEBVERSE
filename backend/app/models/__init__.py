@@ -17,7 +17,17 @@ from app.models.academic import (
     AssessmentType,
     ProjectStatus,
 )
-from app.models.finance import ExpenseCategory, Transaction, Budget, Subscription, TransactionType, PaymentMethod
+from app.models.finance import (
+    ExpenseCategory,
+    Transaction,
+    Budget,
+    Subscription,
+    CategoryType,
+    TransactionType,
+    PaymentMethod,
+    BillingCycle,
+    SubscriptionStatus,
+)
 from app.models.life_admin import Document, Reminder, DocumentCategory, ReminderPriority
 from app.models.ai import ConversationSession, ChatMessage, SenderRole
 from app.models.vector_embeddings import DocumentChunk
@@ -45,8 +55,11 @@ __all__ = [
     "Transaction",
     "Budget",
     "Subscription",
+    "CategoryType",
     "TransactionType",
     "PaymentMethod",
+    "BillingCycle",
+    "SubscriptionStatus",
     "Document",
     "Reminder",
     "DocumentCategory",
