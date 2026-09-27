@@ -1,5 +1,10 @@
-export type AttendanceStatus = 'PRESENT' | 'ABSENT' | 'CANCELLED' | 'DUTY_LEAVE';
-export type AssignmentStatus = 'PENDING' | 'IN_PROGRESS' | 'SUBMITTED' | 'GRADED';
+export type AttendanceStatus = 'PRESENT' | 'ABSENT' | 'DUTY' | 'EXCUSED';
+export type AssignmentStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED';
+export type AssignmentPriority = 'LOW' | 'MEDIUM' | 'HIGH';
+export type ExamType = 'QUIZ' | 'INTERNAL' | 'MIDTERM' | 'END_SEM' | 'LAB' | 'OTHER';
+export type AssessmentType = 'QUIZ' | 'ASSIGNMENT' | 'MIDTERM' | 'LAB' | 'PROJECT' | 'OTHER';
+export type ProjectStatus = 'PLANNING' | 'IN_PROGRESS' | 'COMPLETED' | 'SUBMITTED';
+
 export type TransactionType = 'INCOME' | 'EXPENSE';
 export type PaymentMethod = 'UPI' | 'CARD' | 'CASH' | 'NET_BANKING' | 'OTHER';
 export type DocumentCategory = 'INSURANCE' | 'CERTIFICATE' | 'BILL' | 'RECEIPT' | 'IDENTITY' | 'ACADEMIC' | 'MEDICAL' | 'OTHER';
@@ -17,62 +22,201 @@ export interface UserProfile {
   created_at: string;
 }
 
+export interface AcademicProfile {
+  id: string;
+  user_id: string;
+  college_name?: string;
+  university?: string;
+  degree?: string;
+  branch?: string;
+  current_year?: number;
+  current_semester?: number;
+  roll_number?: string;
+  academic_start_year?: number;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface SubjectItem {
   id: string;
   user_id: string;
   name: string;
   code?: string;
-  professor?: string;
+  credits: number;
+  semester?: number;
+  faculty_name?: string;
   color: string;
-  min_attendance_percent: number;
-  target_attendance_percent: number;
   total_classes: number;
   attended_classes: number;
+  target_attendance: number;
+  min_attendance: number;
   current_percentage: number;
-  status_indicator: 'SAFE' | 'ON_TRACK' | 'AT_RISK' | 'CRITICAL';
+  status_indicator: 'SAFE' | 'ON_TRACK' | 'WARNING' | 'CRITICAL' | 'NO_DATA';
   bunkable_classes: number;
   needed_classes: number;
   created_at: string;
+  updated_at: string;
+}
+
+export interface AttendanceRecordItem {
+  id: string;
+  user_id: string;
+  subject_id: string;
+  subject_name?: string;
+  subject_code?: string;
+  date: string;
+  status: AttendanceStatus;
+  remarks?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AttendanceSummary {
+  overall_percentage: number;
+  total_classes: number;
+  attended_classes: number;
+  below_target_count: number;
+  subjects_count: number;
+  subjects: SubjectItem[];
+}
+
+export interface AttendanceProjection {
+  subject_id: string;
+  subject_name: string;
+  subject_code?: string;
+  total_classes: number;
+  attended_classes: number;
+  current_percentage: number;
+  target_percentage: number;
+  min_percentage: number;
+  status_indicator: string;
+  classes_needed_for_target: number;
+  classes_safe_to_bunk: number;
+  if_attend_next_1: number;
+  if_miss_next_1: number;
+  if_attend_next_3: number;
+  if_miss_next_3: number;
+  if_attend_next_5: number;
+  if_miss_next_5: number;
 }
 
 export interface TimetableSlotItem {
   id: string;
+  user_id: string;
   subject_id: string;
   subject_name: string;
   subject_code?: string;
-  subject_color: string;
+  subject_color?: string;
   day_of_week: number;
   start_time: string;
   end_time: string;
   room?: string;
+  faculty_name?: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface AssignmentItem {
   id: string;
+  user_id: string;
   subject_id: string;
   subject_name: string;
-  subject_color: string;
+  subject_code?: string;
+  subject_color?: string;
   title: string;
   description?: string;
   due_date: string;
   status: AssignmentStatus;
+  priority: AssignmentPriority;
   total_marks?: number;
   obtained_marks?: number;
   created_at: string;
+  updated_at: string;
 }
 
 export interface ExamItem {
   id: string;
+  user_id: string;
   subject_id: string;
   subject_name: string;
-  subject_color: string;
+  subject_code?: string;
+  subject_color?: string;
   title: string;
+  exam_type: ExamType;
   exam_date: string;
-  location?: string;
+  start_time?: string;
+  end_time?: string;
+  venue?: string;
   syllabus_covered?: string;
-  total_marks?: number;
+  max_marks?: number;
   obtained_marks?: number;
   created_at: string;
+  updated_at: string;
+}
+
+export interface InternalMarkItem {
+  id: string;
+  user_id: string;
+  subject_id: string;
+  subject_name?: string;
+  subject_code?: string;
+  assessment_name: string;
+  assessment_type: AssessmentType;
+  marks_obtained: number;
+  max_marks: number;
+  percentage: number;
+  assessment_date?: string;
+  remarks?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AcademicProjectItem {
+  id: string;
+  user_id: string;
+  subject_id?: string;
+  subject_name?: string;
+  title: string;
+  description?: string;
+  status: ProjectStatus;
+  deadline?: string;
+  repository_url?: string;
+  documentation_url?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AcademicNoteItem {
+  id: string;
+  user_id: string;
+  subject_id: string;
+  subject_name?: string;
+  title: string;
+  description?: string;
+  tags?: string;
+  file_url?: string;
+  file_name?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AcademicDashboardData {
+  profile?: AcademicProfile;
+  current_semester?: number;
+  subjects_count: number;
+  attendance: {
+    overall_percentage: number;
+    total_classes: number;
+    attended_classes: number;
+    below_target_count: number;
+  };
+  low_attendance_subjects: SubjectItem[];
+  upcoming_assignments: AssignmentItem[];
+  upcoming_exams: ExamItem[];
+  pending_assignments_count: number;
+  recent_marks: InternalMarkItem[];
+  projects_count: number;
+  notes_count: number;
 }
 
 export interface ExpenseCategory {

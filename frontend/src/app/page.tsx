@@ -9,6 +9,10 @@ import {
 } from 'lucide-react';
 import { ApiService } from '@/lib/api';
 import { CosmicBackground } from '@/components/visual/CosmicBackground';
+import { AcademicsView } from '@/components/academics/AcademicsView';
+import { FinanceView } from '@/components/finance/FinanceView';
+import { LifeAdminView } from '@/components/life-admin/LifeAdminView';
+import { ChatNexusView } from '@/components/chat/ChatNexusView';
 
 export default function DashboardHome() {
   const router = useRouter();
@@ -39,7 +43,6 @@ export default function DashboardHome() {
           });
           ApiService.setToken(loginResp.access_token);
         } catch (e) {
-          // If default user not yet registered, register once
           try {
             const regResp = await ApiService.register({
               email: 'student@webverse.ai',
@@ -97,8 +100,8 @@ export default function DashboardHome() {
           <div>
             <div className="flex items-center gap-2">
               <span className="font-extrabold text-lg tracking-wider text-white">WEBVERSE</span>
-              <span className="px-2 py-0.5 text-[10px] uppercase font-bold tracking-widest bg-violet-500/15 border border-violet-500/30 text-violet-300 rounded-full">
-                Phase 1 Foundation
+              <span className="px-2 py-0.5 text-[10px] uppercase font-bold tracking-widest bg-purple-500/15 border border-purple-500/30 text-purple-300 rounded-full">
+                Phase 2 StudentOS Active
               </span>
             </div>
             <p className="text-[11px] text-gray-400 font-medium hidden sm:block">
@@ -160,7 +163,7 @@ export default function DashboardHome() {
                   onClick={() => setActiveTab('academics')}
                   className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                     activeTab === 'academics'
-                      ? 'bg-purple-600/20 text-white border border-purple-500/30'
+                      ? 'bg-purple-600/20 text-white border border-purple-500/30 shadow-lg shadow-purple-500/10'
                       : 'text-gray-400 hover:text-gray-200 hover:bg-white/5'
                   }`}
                 >
@@ -168,8 +171,8 @@ export default function DashboardHome() {
                     <GraduationCap className="w-4 h-4 text-purple-400" />
                     <span>StudentOS</span>
                   </div>
-                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 text-gray-500 font-bold uppercase">
-                    Phase 2
+                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 font-bold uppercase">
+                    Active
                   </span>
                 </button>
 
@@ -233,7 +236,7 @@ export default function DashboardHome() {
                 <span>Architecture Status</span>
               </div>
               <p className="text-[11px] text-gray-400 leading-relaxed">
-                Phase 1 Foundation active with PostgreSQL/SQLite, JWT auth, and isolated storage.
+                Phase 2 StudentOS Active with deterministic attendance math, timetable matrices, exams, and marks.
               </p>
             </div>
           </div>
@@ -246,182 +249,207 @@ export default function DashboardHome() {
 
         {/* Main Content Area */}
         <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full space-y-8">
-          {/* Universal AI Omnibar Placeholder (Phase 1 AI Interface Shell) */}
-          <div className="w-full max-w-4xl mx-auto">
-            <div className="relative rounded-2xl bg-gradient-to-b from-white/10 to-white/5 p-[1.5px] shadow-2xl shadow-violet-950/40">
-              <div className="bg-[#0A0E1A]/95 rounded-[15px] p-4 backdrop-blur-2xl space-y-3">
-                <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-violet-500/10 border border-violet-500/20 text-violet-300">
-                    <Sparkles className="w-5 h-5 animate-pulse" />
-                  </div>
-                  <input
-                    type="text"
-                    value={omnibarText}
-                    onChange={(e) => setOmnibarText(e.target.value)}
-                    placeholder="Ask WEBVERSE anything... (Universal AI Core activating in Phase 5)"
-                    className="w-full bg-transparent text-sm text-white placeholder-gray-400 focus:outline-none font-medium"
-                  />
-                  <div className="px-3 py-1.5 rounded-xl bg-violet-500/20 border border-violet-500/30 text-violet-300 text-[11px] font-bold uppercase tracking-wider hidden sm:block whitespace-nowrap">
-                    Phase 5 Module
+          {/* Dimension View Switcher */}
+          {activeTab === 'academics' && <AcademicsView />}
+          {activeTab === 'finance' && <FinanceView />}
+          {activeTab === 'life' && <LifeAdminView />}
+          {activeTab === 'ai' && <ChatNexusView />}
+
+          {/* System Overview */}
+          {activeTab === 'overview' && (
+            <div className="space-y-8">
+              {/* Universal AI Omnibar Placeholder */}
+              <div className="w-full max-w-4xl mx-auto">
+                <div className="relative rounded-2xl bg-gradient-to-b from-white/10 to-white/5 p-[1.5px] shadow-2xl shadow-violet-950/40">
+                  <div className="bg-[#0A0E1A]/95 rounded-[15px] p-4 backdrop-blur-2xl space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2.5 rounded-xl bg-violet-500/10 border border-violet-500/20 text-violet-300">
+                        <Sparkles className="w-5 h-5 animate-pulse" />
+                      </div>
+                      <input
+                        type="text"
+                        value={omnibarText}
+                        onChange={(e) => setOmnibarText(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') setActiveTab('ai');
+                        }}
+                        placeholder="Ask WEBVERSE anything... (e.g., 'What is my DAA attendance?')"
+                        className="w-full bg-transparent text-sm text-white placeholder-gray-400 focus:outline-none font-medium"
+                      />
+                      <button
+                        onClick={() => setActiveTab('ai')}
+                        className="px-3.5 py-1.5 rounded-xl bg-violet-500/20 hover:bg-violet-500/30 border border-violet-500/30 text-violet-300 text-[11px] font-bold uppercase tracking-wider hidden sm:block whitespace-nowrap cursor-pointer transition-all"
+                      >
+                        Ask AI Core
+                      </button>
+                    </div>
+
+                    {/* Prompt Preview Chips */}
+                    <div className="pt-3 border-t border-white/5 flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 shrink-0">
+                        Try Asking:
+                      </span>
+                      {samplePrompts.map((p, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setActiveTab('ai')}
+                          className="shrink-0 px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-[11px] text-gray-300 transition-all cursor-pointer border border-white/5"
+                        >
+                          {p}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
+              </div>
 
-                {/* Prompt Preview Chips */}
-                <div className="pt-3 border-t border-white/5 flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 shrink-0">
-                    Target AI Queries:
-                  </span>
-                  {samplePrompts.map((p, idx) => (
-                    <span
-                      key={idx}
-                      className="shrink-0 px-2.5 py-1 rounded-lg bg-white/5 border border-white/5 text-[11px] text-gray-400"
+              {/* Hero Card */}
+              <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-purple-950/40 via-[#0B0F1A]/80 to-cyan-950/40 border border-white/10 relative overflow-hidden shadow-2xl">
+                <div className="relative z-10 space-y-3">
+                  <div className="flex items-center gap-2 text-purple-400 text-xs font-bold tracking-wider uppercase">
+                    <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                    <span>Phase 2 Verified Dimension: StudentOS</span>
+                  </div>
+                  <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                    Welcome to WEBVERSE, {userProfile?.full_name || 'Student Pioneer'}
+                  </h1>
+                  <p className="text-xs sm:text-sm text-gray-300 max-w-2xl leading-relaxed">
+                    Your life. One connected intelligence. StudentOS is live for full attendance monitoring, timetable matrices, assignments, exams, and marks.
+                  </p>
+                  <div className="pt-2">
+                    <button
+                      onClick={() => setActiveTab('academics')}
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-lg shadow-purple-600/30 transition-all cursor-pointer"
                     >
-                      {p}
+                      <GraduationCap className="w-4 h-4" />
+                      <span>Enter StudentOS Dimension</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
+              </div>
+
+              {/* Profile & Node Architecture Matrix */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Authenticated Identity Card */}
+                <div className="p-6 rounded-3xl glass-panel border border-violet-500/20 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="p-3 rounded-2xl bg-violet-500/10 text-violet-400">
+                      <User className="w-6 h-6" />
+                    </div>
+                    <span className="text-[10px] font-extrabold uppercase tracking-widest text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/30">
+                      Authenticated
                     </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Phase 1 System Overview Matrix */}
-          <div className="space-y-6">
-            {/* Hero Card */}
-            <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-violet-950/40 via-[#0B0F1A]/80 to-cyan-950/40 border border-white/10 relative overflow-hidden shadow-2xl">
-              <div className="relative z-10 space-y-3">
-                <div className="flex items-center gap-2 text-violet-400 text-xs font-bold tracking-wider uppercase">
-                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                  <span>Phase 1 Verified Foundation</span>
-                </div>
-                <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-                  Welcome to WEBVERSE, {userProfile?.full_name || 'Student Pioneer'}
-                </h1>
-                <p className="text-xs sm:text-sm text-gray-300 max-w-2xl leading-relaxed">
-                  The authentication layer, database schema, user data isolation, and modular framework foundation are securely established.
-                </p>
-              </div>
-
-              <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-violet-600/10 rounded-full blur-3xl pointer-events-none" />
-            </div>
-
-            {/* Profile & Node Architecture Matrix */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Authenticated Identity Card */}
-              <div className="p-6 rounded-3xl glass-panel border border-violet-500/20 space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="p-3 rounded-2xl bg-violet-500/10 text-violet-400">
-                    <User className="w-6 h-6" />
                   </div>
-                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/30">
-                    Authenticated
-                  </span>
-                </div>
 
-                <div>
-                  <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">
-                    Student Profile
-                  </span>
-                  <div className="text-lg font-bold text-white mt-1">
-                    {userProfile?.full_name}
+                  <div>
+                    <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">
+                      Student Profile
+                    </span>
+                    <div className="text-lg font-bold text-white mt-1">
+                      {userProfile?.full_name}
+                    </div>
+                    <span className="text-xs text-violet-300 block font-mono">
+                      {userProfile?.email}
+                    </span>
                   </div>
-                  <span className="text-xs text-violet-300 block font-mono">
-                    {userProfile?.email}
-                  </span>
-                </div>
 
-                <div className="p-3 rounded-xl bg-white/5 border border-white/5 space-y-1 text-xs">
-                  <div className="flex justify-between text-gray-300">
-                    <span className="text-gray-500">Institution:</span>
-                    <span className="font-semibold">{userProfile?.college_name || 'Apex Institute'}</span>
-                  </div>
-                  <div className="flex justify-between text-gray-300">
-                    <span className="text-gray-500">Branch:</span>
-                    <span className="font-semibold">{userProfile?.branch || 'Computer Science'}</span>
-                  </div>
-                  <div className="flex justify-between text-gray-300">
-                    <span className="text-gray-500">Semester:</span>
-                    <span className="font-semibold">{userProfile?.semester || '6th Semester'}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Verified Phase 1 Milestones */}
-              <div className="p-6 rounded-3xl glass-panel border border-cyan-500/20 space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="p-3 rounded-2xl bg-cyan-500/10 text-cyan-400">
-                    <CheckCircle2 className="w-6 h-6" />
-                  </div>
-                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-full border border-cyan-500/30">
-                    Phase 1 Milestones
-                  </span>
-                </div>
-
-                <div>
-                  <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">
-                    Security & Engine
-                  </span>
-                  <div className="text-lg font-bold text-white mt-1">
-                    Foundation Established
+                  <div className="p-3 rounded-xl bg-white/5 border border-white/5 space-y-1 text-xs">
+                    <div className="flex justify-between text-gray-300">
+                      <span className="text-gray-500">Institution:</span>
+                      <span className="font-semibold">{userProfile?.college_name || 'Apex Institute'}</span>
+                    </div>
+                    <div className="flex justify-between text-gray-300">
+                      <span className="text-gray-500">Branch:</span>
+                      <span className="font-semibold">{userProfile?.branch || 'Computer Science'}</span>
+                    </div>
+                    <div className="flex justify-between text-gray-300">
+                      <span className="text-gray-500">Semester:</span>
+                      <span className="font-semibold">{userProfile?.semester || '6th Semester'}</span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="space-y-2 text-xs text-gray-300">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>PostgreSQL / SQLAlchemy 2.0 Async Engine</span>
+                {/* Verified Phase 1 & 2 Milestones */}
+                <div className="p-6 rounded-3xl glass-panel border border-cyan-500/20 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="p-3 rounded-2xl bg-cyan-500/10 text-cyan-400">
+                      <CheckCircle2 className="w-6 h-6" />
+                    </div>
+                    <span className="text-[10px] font-extrabold uppercase tracking-widest text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-full border border-cyan-500/30">
+                      Active Milestones
+                    </span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>Alembic Database Migrations Configured</span>
+
+                  <div>
+                    <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">
+                      System Dimensions
+                    </span>
+                    <div className="text-lg font-bold text-white mt-1">
+                      Foundation + StudentOS
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>JWT & Bcrypt Authentication System</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>Abstracted User-Isolated Storage Service</span>
+
+                  <div className="space-y-2 text-xs text-gray-300">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Phase 1: Auth & Storage Isolation</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Phase 2: Attendance & Safe Bunk Math</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Phase 2: Timetable & Exam Matrices</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Phase 2: Assignments & Internal Marks</span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Roadmap Node Progression */}
-              <div className="p-6 rounded-3xl glass-panel border border-amber-500/20 space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="p-3 rounded-2xl bg-amber-500/10 text-amber-400">
-                    <Clock className="w-6 h-6" />
+                {/* Roadmap Progression */}
+                <div className="p-6 rounded-3xl glass-panel border border-amber-500/20 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="p-3 rounded-2xl bg-amber-500/10 text-amber-400">
+                      <Clock className="w-6 h-6" />
+                    </div>
+                    <span className="text-[10px] font-extrabold uppercase tracking-widest text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-full border border-amber-500/30">
+                      Roadmap Progression
+                    </span>
                   </div>
-                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-full border border-amber-500/30">
-                    Upcoming Roadmap
-                  </span>
-                </div>
 
-                <div>
-                  <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">
-                    Next Milestones
-                  </span>
-                  <div className="text-lg font-bold text-white mt-1">
-                    Incremental Modules
+                  <div>
+                    <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">
+                      Milestones
+                    </span>
+                    <div className="text-lg font-bold text-white mt-1">
+                      Next Dimensions
+                    </div>
                   </div>
-                </div>
 
-                <div className="space-y-2 text-xs text-gray-400">
-                  <div className="p-2 rounded-xl bg-white/5 flex items-center justify-between">
-                    <span className="text-white font-semibold">Phase 2: StudentOS</span>
-                    <span className="text-[10px] text-purple-400 font-bold">NEXT</span>
-                  </div>
-                  <div className="p-2 rounded-xl bg-white/5 flex items-center justify-between">
-                    <span>Phase 3: Money Manager</span>
-                    <span className="text-[10px] text-gray-500">Planned</span>
-                  </div>
-                  <div className="p-2 rounded-xl bg-white/5 flex items-center justify-between">
-                    <span>Phase 4: Life Admin Vault</span>
-                    <span className="text-[10px] text-gray-500">Planned</span>
+                  <div className="space-y-2 text-xs text-gray-400">
+                    <div className="p-2 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-between">
+                      <span className="text-purple-300 font-bold">Phase 2: StudentOS</span>
+                      <span className="text-[10px] text-emerald-400 font-bold">COMPLETE</span>
+                    </div>
+                    <div className="p-2 rounded-xl bg-white/5 flex items-center justify-between">
+                      <span className="text-white font-semibold">Phase 3: Money Manager</span>
+                      <span className="text-[10px] text-amber-400 font-bold">UPCOMING</span>
+                    </div>
+                    <div className="p-2 rounded-xl bg-white/5 flex items-center justify-between">
+                      <span>Phase 4: Life Admin Vault</span>
+                      <span className="text-[10px] text-gray-500">Planned</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </main>
       </div>
     </div>
