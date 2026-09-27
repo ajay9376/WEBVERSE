@@ -12,7 +12,7 @@ elif db_url.startswith("postgresql://") and not db_url.startswith("postgresql+as
     db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
 
 # Ensure upload directory exists
-os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
+os.makedirs(settings.STORAGE_LOCAL_PATH, exist_ok=True)
 
 # Engine configuration
 engine_kwargs = {"echo": False, "future": True}
