@@ -1,6 +1,22 @@
 from app.models.base import Base, BaseModel
 from app.models.user import User
-from app.models.academic import Subject, AttendanceRecord, TimetableSlot, Assignment, Exam, AcademicNote, AttendanceStatus, AssignmentStatus
+from app.models.academic import (
+    AcademicProfile,
+    Subject,
+    AttendanceRecord,
+    TimetableSlot,
+    Assignment,
+    Exam,
+    InternalMark,
+    AcademicProject,
+    AcademicNote,
+    AttendanceStatus,
+    AssignmentStatus,
+    AssignmentPriority,
+    ExamType,
+    AssessmentType,
+    ProjectStatus,
+)
 from app.models.finance import ExpenseCategory, Transaction, Budget, Subscription, TransactionType, PaymentMethod
 from app.models.life_admin import Document, Reminder, DocumentCategory, ReminderPriority
 from app.models.ai import ConversationSession, ChatMessage, SenderRole
@@ -10,14 +26,21 @@ __all__ = [
     "Base",
     "BaseModel",
     "User",
+    "AcademicProfile",
     "Subject",
     "AttendanceRecord",
     "TimetableSlot",
     "Assignment",
     "Exam",
+    "InternalMark",
+    "AcademicProject",
     "AcademicNote",
     "AttendanceStatus",
     "AssignmentStatus",
+    "AssignmentPriority",
+    "ExamType",
+    "AssessmentType",
+    "ProjectStatus",
     "ExpenseCategory",
     "Transaction",
     "Budget",

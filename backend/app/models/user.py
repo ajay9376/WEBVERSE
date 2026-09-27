@@ -16,11 +16,14 @@ class User(BaseModel):
     monthly_budget_target = Column(String(50), default="10000", nullable=True)
 
     # Relationships
+    academic_profile = relationship("AcademicProfile", back_populates="user", uselist=False, cascade="all, delete-orphan")
     subjects = relationship("Subject", back_populates="user", cascade="all, delete-orphan")
     attendance_records = relationship("AttendanceRecord", back_populates="user", cascade="all, delete-orphan")
     timetable_slots = relationship("TimetableSlot", back_populates="user", cascade="all, delete-orphan")
     assignments = relationship("Assignment", back_populates="user", cascade="all, delete-orphan")
     exams = relationship("Exam", back_populates="user", cascade="all, delete-orphan")
+    internal_marks = relationship("InternalMark", back_populates="user", cascade="all, delete-orphan")
+    academic_projects = relationship("AcademicProject", back_populates="user", cascade="all, delete-orphan")
     academic_notes = relationship("AcademicNote", back_populates="user", cascade="all, delete-orphan")
     
     expense_categories = relationship("ExpenseCategory", back_populates="user", cascade="all, delete-orphan")
