@@ -10,7 +10,7 @@ class AcademicRetriever:
     @staticmethod
     async def retrieve_context(db: AsyncSession, user_id: str, query: str) -> Dict[str, Any]:
         now = datetime.now(timezone.utc)
-        subjects = await AcademicService.get_all_subjects_with_stats(db, user_id)
+        subjects = await AcademicService.get_subjects(db, user_id)
         
         # Upcoming assignments (next 14 days)
         asgn_stmt = select(Assignment).options(selectinload(Assignment.subject)).where(
@@ -54,7 +54,7 @@ class AcademicRetriever:
                     "subject": a.subject.name if a.subject else "General",
                     "title": a.title,
                     "due_date": a.due_date.strftime("%Y-%m-%d %H:%M"),
-                    "status": a.status
+                    "status": a.status.value if hasattr(a.status, "value") else str(a.status)
                 }
                 for a in assignments
             ],

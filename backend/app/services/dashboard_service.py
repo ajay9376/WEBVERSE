@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 from app.models.user import User
-from app.models.academic import Subject, Assignment, Exam
+from app.models.academic import Subject, Assignment, Exam, AssignmentStatus
 from app.models.life_admin import Document, Reminder
 from app.schemas.dashboard import DashboardGlanceResponse
 from app.schemas.academic import AssignmentResponse, ExamResponse
@@ -26,7 +26,7 @@ class DashboardService:
             greeting = f"Welcome to the Webverse, {user.full_name}"
 
         # 1. Academics
-        subjects = await AcademicService.get_all_subjects_with_stats(db, user.id)
+        subjects = await AcademicService.get_subjects(db, user.id)
         overall_attendance = 100.0
         at_risk = 0
         if subjects:
@@ -34,13 +34,12 @@ class DashboardService:
             total_attended = sum(s.attended_classes for s in subjects)
             if total_held > 0:
                 overall_attendance = round((total_attended / total_held) * 100.0, 1)
-            at_risk = sum(1 for s in subjects if s.status_indicator in ("AT_RISK", "CRITICAL"))
+            at_risk = sum(1 for s in subjects if s.status_indicator in ("WARNING", "CRITICAL"))
 
         # Upcoming assignments
         asgn_stmt = select(Assignment).options(selectinload(Assignment.subject)).where(
             Assignment.user_id == user.id,
-            Assignment.status != "SUBMITTED",
-            Assignment.status != "GRADED"
+            Assignment.status != AssignmentStatus.COMPLETED
         ).order_by(Assignment.due_date.asc()).limit(4)
         asgn_res = await db.execute(asgn_stmt)
         upcoming_assignments = [
@@ -49,14 +48,17 @@ class DashboardService:
                 user_id=a.user_id,
                 subject_id=a.subject_id,
                 subject_name=a.subject.name if a.subject else "General",
+                subject_code=a.subject.code if a.subject else None,
                 subject_color=a.subject.color if a.subject else "#8B5CF6",
                 title=a.title,
                 description=a.description,
                 due_date=a.due_date,
                 status=a.status,
+                priority=a.priority,
                 total_marks=a.total_marks,
                 obtained_marks=a.obtained_marks,
-                created_at=a.created_at
+                created_at=a.created_at,
+                updated_at=a.updated_at
             )
             for a in asgn_res.scalars().all()
         ]
@@ -73,14 +75,19 @@ class DashboardService:
                 user_id=e.user_id,
                 subject_id=e.subject_id,
                 subject_name=e.subject.name if e.subject else "Exam",
+                subject_code=e.subject.code if e.subject else None,
                 subject_color=e.subject.color if e.subject else "#8B5CF6",
                 title=e.title,
+                exam_type=e.exam_type,
                 exam_date=e.exam_date,
-                location=e.location,
+                start_time=e.start_time,
+                end_time=e.end_time,
+                venue=e.venue,
                 syllabus_covered=e.syllabus_covered,
-                total_marks=e.total_marks,
+                max_marks=e.max_marks,
                 obtained_marks=e.obtained_marks,
-                created_at=e.created_at
+                created_at=e.created_at,
+                updated_at=e.updated_at
             )
             for e in exam_res.scalars().all()
         ]

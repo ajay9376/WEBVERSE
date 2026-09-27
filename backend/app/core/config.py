@@ -26,7 +26,8 @@ class Settings(BaseSettings):
     # Provider-Agnostic AI & Embeddings Configuration
     LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "gemini")  # gemini, openai, local, etc.
     LLM_MODEL: str = os.getenv("LLM_MODEL", "gemini-1.5-flash")
-    LLM_API_KEY: str = os.getenv("LLM_API_KEY", "")
+    LLM_API_KEY: str = os.getenv("LLM_API_KEY", os.getenv("GEMINI_API_KEY", ""))
+    GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", os.getenv("LLM_API_KEY", ""))
 
     EMBEDDING_PROVIDER: str = os.getenv("EMBEDDING_PROVIDER", "gemini")
     EMBEDDING_MODEL: str = os.getenv("EMBEDDING_MODEL", "models/text-embedding-004")
