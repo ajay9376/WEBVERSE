@@ -100,8 +100,8 @@ export default function DashboardHome() {
           <div>
             <div className="flex items-center gap-2">
               <span className="font-extrabold text-lg tracking-wider text-white">WEBVERSE</span>
-              <span className="px-2 py-0.5 text-[10px] uppercase font-bold tracking-widest bg-purple-500/15 border border-purple-500/30 text-purple-300 rounded-full">
-                Phase 2 StudentOS Active
+              <span className="px-2 py-0.5 text-[10px] uppercase font-bold tracking-widest bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 rounded-full">
+                Phase 6 · AI Core Live
               </span>
             </div>
             <p className="text-[11px] text-gray-400 font-medium hidden sm:block">
@@ -188,8 +188,8 @@ export default function DashboardHome() {
                     <Wallet className="w-4 h-4 text-emerald-400" />
                     <span>Money Manager</span>
                   </div>
-                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 text-gray-500 font-bold uppercase">
-                    Phase 3
+                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold uppercase">
+                    Active
                   </span>
                 </button>
 
@@ -205,8 +205,8 @@ export default function DashboardHome() {
                     <FolderKanban className="w-4 h-4 text-amber-400" />
                     <span>Life Admin Vault</span>
                   </div>
-                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 text-gray-500 font-bold uppercase">
-                    Phase 4
+                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold uppercase">
+                    Active
                   </span>
                 </button>
 
@@ -222,21 +222,21 @@ export default function DashboardHome() {
                     <MessageSquareCode className="w-4 h-4 text-cyan-400" />
                     <span>Universal AI Core</span>
                   </div>
-                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 text-gray-500 font-bold uppercase">
-                    Phase 5
+                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold uppercase">
+                    Active
                   </span>
                 </button>
               </nav>
             </div>
 
             {/* Architecture Node Status */}
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-violet-950/40 via-indigo-950/20 to-transparent border border-violet-500/20 space-y-2">
-              <div className="flex items-center gap-2 text-violet-300 text-xs font-bold">
-                <Cpu className="w-4 h-4 text-violet-400" />
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-cyan-950/40 via-indigo-950/20 to-transparent border border-cyan-500/20 space-y-2">
+              <div className="flex items-center gap-2 text-cyan-300 text-xs font-bold">
+                <Cpu className="w-4 h-4 text-cyan-400" />
                 <span>Architecture Status</span>
               </div>
               <p className="text-[11px] text-gray-400 leading-relaxed">
-                Phase 2 StudentOS Active with deterministic attendance math, timetable matrices, exams, and marks.
+                Phase 6 complete: Universal AI Core, cross-module RAG retrieval, action execution, and life health scoring are all live.
               </p>
             </div>
           </div>
@@ -306,24 +306,31 @@ export default function DashboardHome() {
               {/* Hero Card */}
               <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-purple-950/40 via-[#0B0F1A]/80 to-cyan-950/40 border border-white/10 relative overflow-hidden shadow-2xl">
                 <div className="relative z-10 space-y-3">
-                  <div className="flex items-center gap-2 text-purple-400 text-xs font-bold tracking-wider uppercase">
+                  <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold tracking-wider uppercase">
                     <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                    <span>Phase 2 Verified Dimension: StudentOS</span>
+                    <span>All 6 Phases Complete · Universal AI Core Active</span>
                   </div>
                   <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
                     Welcome to WEBVERSE, {userProfile?.full_name || 'Student Pioneer'}
                   </h1>
                   <p className="text-xs sm:text-sm text-gray-300 max-w-2xl leading-relaxed">
-                    Your life. One connected intelligence. StudentOS is live for full attendance monitoring, timetable matrices, assignments, exams, and marks.
+                    Your life. One connected intelligence. All modules are live — StudentOS, Money Manager, Life Admin Vault, and the Universal AI Core with cross-module RAG synthesis and action execution.
                   </p>
-                  <div className="pt-2">
+                  <div className="pt-2 flex flex-wrap gap-2">
+                    <button
+                      onClick={() => setActiveTab('ai')}
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs shadow-lg shadow-cyan-600/30 transition-all cursor-pointer"
+                    >
+                      <Sparkles className="w-4 h-4" />
+                      <span>Open AI Nexus</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
                     <button
                       onClick={() => setActiveTab('academics')}
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-lg shadow-purple-600/30 transition-all cursor-pointer"
+                      className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 font-semibold text-xs transition-all cursor-pointer"
                     >
                       <GraduationCap className="w-4 h-4" />
-                      <span>Enter StudentOS Dimension</span>
-                      <ArrowRight className="w-4 h-4" />
+                      <span>StudentOS</span>
                     </button>
                   </div>
                 </div>
@@ -388,26 +395,34 @@ export default function DashboardHome() {
                       System Dimensions
                     </span>
                     <div className="text-lg font-bold text-white mt-1">
-                      Foundation + StudentOS
+                      6 of 6 Phases Complete
                     </div>
                   </div>
 
                   <div className="space-y-2 text-xs text-gray-300">
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>Phase 1: Auth & Storage Isolation</span>
+                      <span>Phase 1: Auth & Multi-Tenant Storage</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>Phase 2: Attendance & Safe Bunk Math</span>
+                      <span>Phase 2: StudentOS — Attendance & Exams</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>Phase 2: Timetable & Exam Matrices</span>
+                      <span>Phase 3: Money Manager — Finance & Budget</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>Phase 2: Assignments & Internal Marks</span>
+                      <span>Phase 4: Life Admin Vault — Docs & Bills</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Phase 5: Universal AI Router & RAG</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Phase 6: Cross-Module AI & Action Execution</span>
                     </div>
                   </div>
                 </div>
@@ -437,13 +452,17 @@ export default function DashboardHome() {
                       <span className="text-purple-300 font-bold">Phase 2: StudentOS</span>
                       <span className="text-[10px] text-emerald-400 font-bold">COMPLETE</span>
                     </div>
-                    <div className="p-2 rounded-xl bg-white/5 flex items-center justify-between">
-                      <span className="text-white font-semibold">Phase 3: Money Manager</span>
-                      <span className="text-[10px] text-amber-400 font-bold">UPCOMING</span>
+                    <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-between">
+                      <span className="text-emerald-300 font-bold">Phase 3: Money Manager</span>
+                      <span className="text-[10px] text-emerald-400 font-bold">COMPLETE</span>
                     </div>
-                    <div className="p-2 rounded-xl bg-white/5 flex items-center justify-between">
-                      <span>Phase 4: Life Admin Vault</span>
-                      <span className="text-[10px] text-gray-500">Planned</span>
+                    <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-between">
+                      <span className="text-amber-300 font-bold">Phase 4: Life Admin Vault</span>
+                      <span className="text-[10px] text-emerald-400 font-bold">COMPLETE</span>
+                    </div>
+                    <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-between">
+                      <span className="text-cyan-300 font-bold">Phase 5 & 6: AI Core</span>
+                      <span className="text-[10px] text-emerald-400 font-bold">COMPLETE</span>
                     </div>
                   </div>
                 </div>
