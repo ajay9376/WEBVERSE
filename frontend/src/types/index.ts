@@ -10,8 +10,6 @@ export type TransactionType = 'INCOME' | 'EXPENSE';
 export type PaymentMethod = 'UPI' | 'CARD' | 'CASH' | 'BANK_TRANSFER' | 'NET_BANKING' | 'OTHER';
 export type BillingCycle = 'WEEKLY' | 'MONTHLY' | 'QUARTERLY' | 'YEARLY' | 'CUSTOM';
 export type SubscriptionStatus = 'ACTIVE' | 'PAUSED' | 'CANCELLED';
-export type DocumentCategory = 'INSURANCE' | 'CERTIFICATE' | 'BILL' | 'RECEIPT' | 'IDENTITY' | 'ACADEMIC' | 'MEDICAL' | 'OTHER';
-export type ReminderPriority = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 
 export interface UserProfile {
   id: string;
@@ -355,30 +353,156 @@ export interface FinanceDashboardData {
 export type FinanceAnalytics = FinanceDashboardData;
 
 
+export type DocumentCategory = 
+  | 'IDENTITY' 
+  | 'EDUCATION' 
+  | 'INSURANCE' 
+  | 'FINANCE' 
+  | 'BILLS' 
+  | 'MEDICAL' 
+  | 'TRAVEL' 
+  | 'CERTIFICATES' 
+  | 'LEGAL' 
+  | 'OTHER';
+
+export type BillStatus = 'PENDING' | 'PAID' | 'OVERDUE' | 'CANCELLED';
+export type RecurrencePattern = 'NONE' | 'WEEKLY' | 'MONTHLY' | 'QUARTERLY' | 'YEARLY' | 'CUSTOM';
+export type PolicyType = 'HEALTH' | 'VEHICLE' | 'LIFE' | 'TRAVEL' | 'HOME' | 'OTHER';
+export type PremiumFrequency = 'MONTHLY' | 'QUARTERLY' | 'YEARLY' | 'ONE_TIME';
+export type ImportantDateCategory = 'PASSPORT' | 'LICENSE' | 'WARRANTY' | 'COLLEGE' | 'RENEWAL' | 'ANNIVERSARY' | 'OTHER';
+export type ReminderPriority = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+export type ReminderStatus = 'PENDING' | 'COMPLETED' | 'CANCELLED';
+
+export interface LifeAdminCategory {
+  id: string;
+  user_id: string;
+  name: string;
+  description?: string;
+  icon: string;
+  color: string;
+  is_system: boolean;
+  created_at?: string;
+}
+
 export interface DocumentItem {
   id: string;
+  user_id?: string;
+  category_id?: string;
+  title: string;
+  description?: string;
   filename: string;
+  file_name?: string;
   file_type: string;
+  mime_type?: string;
   file_size: number;
   category: DocumentCategory;
   tags?: string;
+  document_date?: string;
+  expiry_date?: string;
+  issuer?: string;
+  reference_number?: string;
   extracted_text_preview?: string;
   metadata_fields?: Record<string, any>;
   is_indexed: boolean;
+  days_until_expiry?: number;
+  is_expired?: boolean;
   created_at: string;
+  updated_at?: string;
+}
+
+export interface BillItem {
+  id: string;
+  user_id: string;
+  title: string;
+  provider: string;
+  category: string;
+  amount: number;
+  due_date: string;
+  status: BillStatus;
+  recurring: boolean;
+  recurrence: RecurrencePattern;
+  payment_reference?: string;
+  notes?: string;
+  days_until_due: number;
+  days_overdue: number;
+  is_overdue: boolean;
+  created_at: string;
+  updated_at?: string;
+}
+
+export interface InsurancePolicyItem {
+  id: string;
+  user_id: string;
+  provider: string;
+  policy_name: string;
+  policy_number: string;
+  policy_type: PolicyType;
+  start_date?: string;
+  expiry_date: string;
+  premium_amount: number;
+  premium_frequency: PremiumFrequency;
+  coverage_amount?: number;
+  document_id?: string;
+  notes?: string;
+  days_until_expiry: number;
+  is_expired: boolean;
+  is_expiring_soon: boolean;
+  created_at: string;
+  updated_at?: string;
+}
+
+export interface ImportantDateItem {
+  id: string;
+  user_id: string;
+  title: string;
+  description?: string;
+  date: string;
+  category: ImportantDateCategory;
+  recurring: boolean;
+  recurrence: RecurrencePattern;
+  days_remaining: number;
+  is_past: boolean;
+  created_at: string;
+  updated_at?: string;
 }
 
 export interface ReminderItem {
   id: string;
+  user_id?: string;
   title: string;
   description?: string;
   due_at: string;
   priority: ReminderPriority;
+  status?: ReminderStatus;
   is_completed: boolean;
   linked_module?: string;
   linked_id?: string;
   created_at: string;
+  updated_at?: string;
   is_overdue: boolean;
+  days_until_due?: number;
+}
+
+export interface LifeAdminDashboardData {
+  total_documents: number;
+  category_counts: Record<string, number>;
+  bills_summary: {
+    pending_count: number;
+    overdue_count: number;
+    paid_count: number;
+    total_pending_amount: number;
+    total_overdue_amount: number;
+    upcoming_bills: BillItem[];
+  };
+  policies_summary: {
+    total_policies: number;
+    expiring_soon_count: number;
+    total_annual_premiums: number;
+    expiring_policies: InsurancePolicyItem[];
+  };
+  upcoming_dates: ImportantDateItem[];
+  pending_reminders: ReminderItem[];
+  recent_documents: DocumentItem[];
 }
 
 export interface CitationSource {
