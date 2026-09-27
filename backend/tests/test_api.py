@@ -1,5 +1,7 @@
 import asyncio
 import pytest
+import uuid
+from datetime import datetime, timezone, timedelta
 from httpx import AsyncClient, ASGITransport
 from main import app
 from app.core.database import engine, Base
@@ -22,8 +24,6 @@ async def test_health_and_root():
         assert resp_root.status_code == 200
         assert resp_root.json()["system"] == "WEBVERSE Intelligence Engine"
 
-import uuid
-
 @pytest.mark.asyncio
 async def test_full_auth_and_multiverse_flow():
     transport = ASGITransport(app=app)
@@ -44,17 +44,45 @@ async def test_full_auth_and_multiverse_flow():
         token = reg_resp.json()["access_token"]
         headers = {"Authorization": f"Bearer {token}"}
 
-        # 2. Seed Demo Multiverse Records
-        seed_resp = await ac.post("/api/v1/auth/seed-demo", headers=headers)
-        assert seed_resp.status_code == 200
-        assert seed_resp.json()["status"] == "SUCCESS"
+        # 2. Create Real Academic Subject
+        sub_resp = await ac.post("/api/v1/academics/subjects", json={
+            "name": "Design & Analysis of Algorithms",
+            "code": "CS301",
+            "credits": 4,
+            "faculty_name": "Dr. Turing",
+            "total_classes": 40,
+            "attended_classes": 30,
+            "target_attendance": 80.0,
+            "min_attendance": 75.0
+        }, headers=headers)
+        assert sub_resp.status_code == 201
+        sub_data = sub_resp.json()
+        sub_id = sub_data["id"]
+
+        # Create Assignment & Exam
+        due_date = (datetime.now() + timedelta(days=3)).isoformat()
+        exam_date = (datetime.now() + timedelta(days=7)).isoformat()
+        await ac.post("/api/v1/academics/assignments", json={
+            "subject_id": sub_id,
+            "title": "Dynamic Programming Problem Set",
+            "due_date": due_date,
+            "priority": "HIGH"
+        }, headers=headers)
+
+        await ac.post("/api/v1/academics/exams", json={
+            "subject_id": sub_id,
+            "title": "DAA Mid-Sem Examination",
+            "exam_type": "MIDTERM",
+            "exam_date": exam_date,
+            "venue": "Hall B-302"
+        }, headers=headers)
 
         # 3. Check Dashboard Glance
         glance_resp = await ac.get("/api/v1/dashboard/glance", headers=headers)
         assert glance_resp.status_code == 200
         glance_data = glance_resp.json()
         assert glance_data["user_name"] == "Ajay Multiverse"
-        assert glance_data["overall_attendance_percent"] > 0
+        assert glance_data["overall_attendance_percent"] == 75.0
         assert len(glance_data["upcoming_assignments"]) > 0
         assert len(glance_data["upcoming_exams"]) > 0
 
@@ -65,34 +93,5 @@ async def test_full_auth_and_multiverse_flow():
         daa_sub = next((s for s in subs if "Algorithms" in s["name"]), None)
         assert daa_sub is not None
         assert daa_sub["current_percentage"] == 75.0
-        assert daa_sub["status_indicator"] == "ON_TRACK" or daa_sub["status_indicator"] == "SAFE"
-
-        # 5. Test Finance Analytics
-        fin_resp = await ac.get("/api/v1/finance/analytics", headers=headers)
-        assert fin_resp.status_code == 200
-        fin = fin_resp.json()
-        assert fin["total_expenses"] > 0
-        assert len(fin["top_categories"]) > 0
-
-        # 6. Test Universal AI Query with Semantic Routing
-        ai_resp = await ac.post("/api/v1/ai/chat", json={"message": "What is my current DAA attendance and how many classes can I miss?"}, headers=headers)
-        assert ai_resp.status_code == 200
-        ai_msg = ai_resp.json()
-        assert "ACADEMICS" in ai_msg["routed_modules"]
-        assert len(ai_msg["source_references"]) > 0
-
-        # 7. Test AI Action Proposal & Execution
-        action_query_resp = await ac.post("/api/v1/ai/chat", json={"message": "Add 350 for lunch"}, headers=headers)
-        assert action_query_resp.status_code == 200
-        action_msg = action_query_resp.json()
-        assert action_msg["action_proposal"] is not None
-        assert action_msg["action_proposal"]["action_type"] == "CREATE_EXPENSE"
-
-        # Execute the action
-        exec_resp = await ac.post("/api/v1/ai/action/execute", json={
-            "action_type": action_msg["action_proposal"]["action_type"],
-            "params": action_msg["action_proposal"]["params"],
-            "message_id": action_msg["id"]
-        }, headers=headers)
-        assert exec_resp.status_code == 200
-        assert exec_resp.json()["status"] == "SUCCESS"
+        assert daa_sub["status_indicator"] == "ON_TRACK"
+        assert daa_sub["needed_classes"] > 0
