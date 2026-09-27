@@ -1,23 +1,25 @@
 'use client';
 
 import React from 'react';
+import { motion } from 'framer-motion';
 import { 
   GraduationCap, Wallet, FolderKanban, Sparkles, Clock, 
-  AlertTriangle, CheckCircle2, TrendingUp, Calendar, ArrowRight, BookOpen, ShieldAlert
+  AlertTriangle, CheckCircle2, TrendingUp, Calendar, ArrowRight, BookOpen, ShieldAlert,
+  FileText, Activity
 } from 'lucide-react';
 import { DashboardGlance } from '@/types';
-import { ActiveTab } from '../layout/Sidebar';
 
 interface OverviewMatrixProps {
   data: DashboardGlance | null;
-  onNavigate: (tab: ActiveTab) => void;
+  onNavigate: (tab: string) => void;
 }
 
 export const OverviewMatrix: React.FC<OverviewMatrixProps> = ({ data, onNavigate }) => {
   if (!data) {
     return (
-      <div className="p-12 text-center text-gray-500 text-xs">
-        Loading Webverse Matrix...
+      <div className="p-16 text-center text-gray-400 text-xs flex flex-col items-center justify-center space-y-3">
+        <div className="w-8 h-8 rounded-full border-2 border-violet-500 border-t-transparent animate-spin" />
+        <span className="font-mono tracking-wider">Synchronizing Multiverse Glance Matrix...</span>
       </div>
     );
   }
@@ -26,14 +28,24 @@ export const OverviewMatrix: React.FC<OverviewMatrixProps> = ({ data, onNavigate
   const isBudgetSafe = data.budget_health_status === 'HEALTHY';
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-300">
+    <motion.div 
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="space-y-8"
+    >
       {/* Multiverse Greeting Hero */}
-      <div className="relative p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-violet-950/40 via-[#0B0F1A]/80 to-cyan-950/40 border border-white/10 overflow-hidden shadow-2xl">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        className="relative p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-violet-950/50 via-[#0B0F1A]/90 to-cyan-950/50 border border-white/10 overflow-hidden shadow-2xl"
+      >
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-violet-400 text-xs font-bold tracking-wider uppercase">
-              <Sparkles className="w-4 h-4 animate-pulse" />
-              <span>Connected Life Intelligence</span>
+              <Sparkles className="w-4 h-4 animate-pulse text-cyan-300" />
+              <span>Universal Life Intelligence</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
               {data.greeting}
@@ -44,31 +56,36 @@ export const OverviewMatrix: React.FC<OverviewMatrixProps> = ({ data, onNavigate
           </div>
 
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => onNavigate('chat')}
-              className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-500 hover:opacity-90 text-white font-extrabold text-xs shadow-xl shadow-violet-600/30 transition-all cursor-pointer"
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => onNavigate('ai')}
+              className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-500 hover:opacity-95 text-white font-extrabold text-xs shadow-xl shadow-violet-600/30 transition-all cursor-pointer"
             >
               <Sparkles className="w-4 h-4" />
               <span>Open AI Nexus</span>
-            </button>
+              <ArrowRight className="w-4 h-4" />
+            </motion.button>
           </div>
         </div>
 
-        {/* Ambient Glow in background */}
-        <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-violet-600/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -left-20 -top-20 w-80 h-80 bg-cyan-600/10 rounded-full blur-3xl pointer-events-none" />
-      </div>
+        {/* Ambient Glows */}
+        <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-violet-600/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -left-20 -top-20 w-80 h-80 bg-cyan-600/15 rounded-full blur-3xl pointer-events-none" />
+      </motion.div>
 
       {/* The 3 Main Multiverse Dimension Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* 1. ACADEMICS DIMENSION */}
-        <div
+        <motion.div
+          whileHover={{ y: -4 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
           onClick={() => onNavigate('academics')}
-          className="p-6 rounded-3xl glass-panel border border-purple-500/20 hover:border-purple-500/50 transition-all cursor-pointer group hover:scale-[1.01] flex flex-col justify-between"
+          className="p-6 rounded-3xl glass-panel border border-purple-500/20 hover:border-purple-500/50 transition-all cursor-pointer group flex flex-col justify-between shadow-lg hover:shadow-purple-500/10"
         >
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <div className="p-3 rounded-2xl bg-purple-500/10 text-purple-400">
+              <div className="p-3 rounded-2xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
                 <GraduationCap className="w-6 h-6" />
               </div>
               <span className="text-[10px] font-extrabold uppercase tracking-widest text-purple-400 bg-purple-500/10 px-2.5 py-1 rounded-full border border-purple-500/30">
@@ -80,20 +97,25 @@ export const OverviewMatrix: React.FC<OverviewMatrixProps> = ({ data, onNavigate
               <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">
                 Overall Attendance
               </span>
-              <div className="text-3xl font-black text-white mt-1">
-                {data.overall_attendance_percent}%
+              <div className="text-3xl font-black text-white mt-1 flex items-baseline gap-2">
+                <span>{data.overall_attendance_percent}%</span>
+                {isAttendanceSafe ? (
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                ) : (
+                  <AlertTriangle className="w-5 h-5 text-rose-400" />
+                )}
               </div>
               <span
                 className={`text-[11px] font-semibold mt-1 block ${
                   isAttendanceSafe ? 'text-emerald-400' : 'text-rose-400'
                 }`}
               >
-                {isAttendanceSafe ? 'Safe Academic Standing' : `${data.subjects_at_risk_count} subjects below target`}
+                {isAttendanceSafe ? 'Safe Academic Standing (≥ 75%)' : `${data.subjects_at_risk_count} subjects below target`}
               </span>
             </div>
 
             {/* Upcoming Academic Highlight */}
-            {data.upcoming_exams && data.upcoming_exams.length > 0 && (
+            {data.upcoming_exams && data.upcoming_exams.length > 0 ? (
               <div className="p-3 rounded-xl bg-white/5 border border-white/5 text-[11px] space-y-1">
                 <div className="text-gray-400 text-[10px] uppercase font-bold flex items-center gap-1">
                   <Clock className="w-3 h-3 text-purple-400" />
@@ -106,6 +128,23 @@ export const OverviewMatrix: React.FC<OverviewMatrixProps> = ({ data, onNavigate
                   {new Date(data.upcoming_exams[0].exam_date).toLocaleDateString()}
                 </div>
               </div>
+            ) : data.upcoming_assignments && data.upcoming_assignments.length > 0 ? (
+              <div className="p-3 rounded-xl bg-white/5 border border-white/5 text-[11px] space-y-1">
+                <div className="text-gray-400 text-[10px] uppercase font-bold flex items-center gap-1">
+                  <BookOpen className="w-3 h-3 text-purple-400" />
+                  <span>Next Assignment</span>
+                </div>
+                <div className="font-bold text-white truncate">
+                  {data.upcoming_assignments[0].title}
+                </div>
+                <div className="text-purple-300 text-[10px]">
+                  Due: {new Date(data.upcoming_assignments[0].due_date).toLocaleDateString()}
+                </div>
+              </div>
+            ) : (
+              <div className="p-3 rounded-xl bg-white/5 border border-white/5 text-[11px] text-gray-400">
+                No immediate exams or assignments pending.
+              </div>
             )}
           </div>
 
@@ -113,16 +152,18 @@ export const OverviewMatrix: React.FC<OverviewMatrixProps> = ({ data, onNavigate
             <span>Manage Subjects & Schedule</span>
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </div>
-        </div>
+        </motion.div>
 
         {/* 2. FINANCE DIMENSION */}
-        <div
+        <motion.div
+          whileHover={{ y: -4 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
           onClick={() => onNavigate('finance')}
-          className="p-6 rounded-3xl glass-panel border border-emerald-500/20 hover:border-emerald-500/50 transition-all cursor-pointer group hover:scale-[1.01] flex flex-col justify-between"
+          className="p-6 rounded-3xl glass-panel border border-emerald-500/20 hover:border-emerald-500/50 transition-all cursor-pointer group flex flex-col justify-between shadow-lg hover:shadow-emerald-500/10"
         >
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <div className="p-3 rounded-2xl bg-emerald-500/10 text-emerald-400">
+              <div className="p-3 rounded-2xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                 <Wallet className="w-6 h-6" />
               </div>
               <span className="text-[10px] font-extrabold uppercase tracking-widest text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/30">
@@ -135,7 +176,7 @@ export const OverviewMatrix: React.FC<OverviewMatrixProps> = ({ data, onNavigate
                 Remaining Safe Budget
               </span>
               <div className="text-3xl font-black text-white mt-1">
-                ₹{data.monthly_remaining_budget.toLocaleString('en-IN')}
+                ₹{Math.max(0, data.monthly_remaining_budget).toLocaleString('en-IN')}
               </div>
               <span
                 className={`text-[11px] font-semibold mt-1 block ${
@@ -150,7 +191,13 @@ export const OverviewMatrix: React.FC<OverviewMatrixProps> = ({ data, onNavigate
             <div className="space-y-1.5">
               <div className="w-full bg-white/5 h-2 rounded-full overflow-hidden">
                 <div
-                  className="h-full rounded-full transition-all bg-emerald-500"
+                  className={`h-full rounded-full transition-all ${
+                    data.budget_health_status === 'CRITICAL'
+                      ? 'bg-rose-500'
+                      : data.budget_health_status === 'CAUTION'
+                      ? 'bg-amber-500'
+                      : 'bg-emerald-500'
+                  }`}
                   style={{
                     width: `${Math.min(
                       100,
@@ -166,16 +213,18 @@ export const OverviewMatrix: React.FC<OverviewMatrixProps> = ({ data, onNavigate
             <span>View Spend Analytics</span>
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </div>
-        </div>
+        </motion.div>
 
         {/* 3. LIFE ADMIN DIMENSION */}
-        <div
-          onClick={() => onNavigate('life-admin')}
-          className="p-6 rounded-3xl glass-panel border border-amber-500/20 hover:border-amber-500/50 transition-all cursor-pointer group hover:scale-[1.01] flex flex-col justify-between"
+        <motion.div
+          whileHover={{ y: -4 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+          onClick={() => onNavigate('life')}
+          className="p-6 rounded-3xl glass-panel border border-amber-500/20 hover:border-amber-500/50 transition-all cursor-pointer group flex flex-col justify-between shadow-lg hover:shadow-amber-500/10"
         >
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <div className="p-3 rounded-2xl bg-amber-500/10 text-amber-400">
+              <div className="p-3 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
                 <FolderKanban className="w-6 h-6" />
               </div>
               <span className="text-[10px] font-extrabold uppercase tracking-widest text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-full border border-amber-500/30">
@@ -196,7 +245,7 @@ export const OverviewMatrix: React.FC<OverviewMatrixProps> = ({ data, onNavigate
             </div>
 
             {/* Top Reminder */}
-            {data.pending_reminders && data.pending_reminders.length > 0 && (
+            {data.pending_reminders && data.pending_reminders.length > 0 ? (
               <div className="p-3 rounded-xl bg-white/5 border border-white/5 text-[11px] space-y-1">
                 <div className="text-gray-400 text-[10px] uppercase font-bold flex items-center gap-1">
                   <Clock className="w-3 h-3 text-amber-400" />
@@ -209,6 +258,10 @@ export const OverviewMatrix: React.FC<OverviewMatrixProps> = ({ data, onNavigate
                   {new Date(data.pending_reminders[0].due_at).toLocaleDateString()}
                 </div>
               </div>
+            ) : (
+              <div className="p-3 rounded-xl bg-white/5 border border-white/5 text-[11px] text-gray-400">
+                All reminders and vault tasks up to date!
+              </div>
             )}
           </div>
 
@@ -216,8 +269,24 @@ export const OverviewMatrix: React.FC<OverviewMatrixProps> = ({ data, onNavigate
             <span>Access Vault & Documents</span>
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </div>
+        </motion.div>
+      </div>
+
+      {/* Connected Nodes Quick Status Bar */}
+      <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 flex flex-wrap items-center justify-between gap-4 text-xs">
+        <div className="flex items-center gap-2 text-gray-400">
+          <Activity className="w-4 h-4 text-cyan-400" />
+          <span className="font-semibold text-gray-300">Active Dimensions:</span>
+          {data.active_dimensions.map((dim, i) => (
+            <span key={i} className="px-2 py-0.5 rounded bg-white/5 text-gray-300 font-mono text-[10px]">
+              {dim}
+            </span>
+          ))}
+        </div>
+        <div className="text-[11px] text-gray-500">
+          Last synchronized: {new Date().toLocaleTimeString()}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
