@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-cosmic: #06080E;
+    --bg-card: rgba(13, 17, 26, 0.75);
+    --border-glow: rgba(139, 92, 246, 0.25);
+    --accent-violet: #8B5CF6;
+    --accent-cyan: #06B6D4;
+    --accent-emerald: #10B981;
+    --accent-amber: #F59E0B;
+    --accent-rose: #F43F5E;
+  }
+
+  body {
+    background-color: #06080E;
+    color: #F3F4F6;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    overflow-x: hidden;
+  }
+}
+
+/* Glassmorphic Cyber Panels */
+.glass-panel {
+  background: rgba(13, 17, 26, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.glass-panel-glow {
+  background: rgba(15, 21, 34, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  box-shadow: 0 0 25px -5px rgba(139, 92, 246, 0.2);
+}
+
+.glass-panel-cyan {
+  background: rgba(11, 25, 34, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  box-shadow: 0 0 25px -5px rgba(6, 182, 212, 0.2);
+}
+
+.glass-panel-emerald {
+  background: rgba(10, 29, 22, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.2);
+}
+
+.glass-panel-amber {
+  background: rgba(30, 22, 10, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.2);
+}
+
+/* Gradient Text Shimmers */
+.text-gradient-cosmic {
+  background: linear-gradient(135deg, #C084FC 0%, #60A5FA 50%, #34D399 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-purple {
+  background: linear-gradient(135deg, #E879F9 0%, #8B5CF6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-cyan {
+  background: linear-gradient(135deg, #67E8F9 0%, #06B6D4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-emerald {
+  background: linear-gradient(135deg, #6EE7B7 0%, #10B981 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(10, 14, 23, 0.5);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.3);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.6);
+}
+
+/* Multiverse Glow animations */
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.03); }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 4s infinite ease-in-out;
+}
