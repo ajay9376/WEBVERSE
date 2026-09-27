@@ -5,8 +5,11 @@ export type ExamType = 'QUIZ' | 'INTERNAL' | 'MIDTERM' | 'END_SEM' | 'LAB' | 'OT
 export type AssessmentType = 'QUIZ' | 'ASSIGNMENT' | 'MIDTERM' | 'LAB' | 'PROJECT' | 'OTHER';
 export type ProjectStatus = 'PLANNING' | 'IN_PROGRESS' | 'COMPLETED' | 'SUBMITTED';
 
+export type CategoryType = 'INCOME' | 'EXPENSE';
 export type TransactionType = 'INCOME' | 'EXPENSE';
-export type PaymentMethod = 'UPI' | 'CARD' | 'CASH' | 'NET_BANKING' | 'OTHER';
+export type PaymentMethod = 'UPI' | 'CARD' | 'CASH' | 'BANK_TRANSFER' | 'NET_BANKING' | 'OTHER';
+export type BillingCycle = 'WEEKLY' | 'MONTHLY' | 'QUARTERLY' | 'YEARLY' | 'CUSTOM';
+export type SubscriptionStatus = 'ACTIVE' | 'PAUSED' | 'CANCELLED';
 export type DocumentCategory = 'INSURANCE' | 'CERTIFICATE' | 'BILL' | 'RECEIPT' | 'IDENTITY' | 'ACADEMIC' | 'MEDICAL' | 'OTHER';
 export type ReminderPriority = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 
@@ -223,59 +226,134 @@ export interface ExpenseCategory {
   id: string;
   user_id: string;
   name: string;
+  category_type: CategoryType;
   icon: string;
   color: string;
   budget_limit?: number;
   spent_amount?: number;
+  is_system?: boolean;
+  created_at?: string;
 }
 
 export interface CategorySpend {
   category_id?: string;
   category_name: string;
   color: string;
+  icon: string;
   amount: number;
   percentage: number;
+  budget_limit?: number;
+  is_over_budget?: boolean;
 }
 
 export interface TransactionItem {
   id: string;
+  user_id: string;
   category_id?: string;
   category_name: string;
   category_color: string;
+  category_icon?: string;
   title: string;
+  merchant?: string;
   amount: number;
   type: TransactionType;
+  transaction_type?: TransactionType;
   date: string;
   payment_method: PaymentMethod;
   notes?: string;
   is_recurring: boolean;
+  receipt_document_id?: string;
   created_at: string;
+  updated_at?: string;
+}
+
+export interface TransactionListResponse {
+  transactions: TransactionItem[];
+  total_count: number;
+  total_income: number;
+  total_expenses: number;
+  net_balance: number;
+}
+
+export interface BudgetItem {
+  id: string;
+  user_id: string;
+  category_id?: string;
+  category_name?: string;
+  category_color?: string;
+  amount: number;
+  month: number;
+  year: number;
+  period: string;
+  spent_amount: number;
+  remaining_amount: number;
+  percentage_used: number;
+  is_over_budget: boolean;
+  created_at: string;
+}
+
+export interface BudgetUsageSummary {
+  period: string;
+  overall_budget: number;
+  total_spent: number;
+  remaining_budget: number;
+  percentage_used: number;
+  is_over_budget: boolean;
+  category_budgets: BudgetItem[];
 }
 
 export interface SubscriptionItem {
   id: string;
+  user_id: string;
+  category_id?: string;
+  category_name?: string;
   name: string;
   amount: number;
-  billing_cycle: string;
+  billing_cycle: BillingCycle;
   next_billing_date: string;
+  payment_method: PaymentMethod;
+  status: SubscriptionStatus;
+  notes?: string;
+  monthly_equivalent: number;
   is_active: boolean;
   created_at: string;
 }
 
-export interface FinanceAnalytics {
-  current_month: string;
+export interface MonthlyTrendPoint {
+  month_label: string;
+  period: string;
+  income: number;
+  expenses: number;
+  net_savings: number;
+}
+
+export interface SpendingTrendsResponse {
+  period_count: number;
+  trends: MonthlyTrendPoint[];
+}
+
+export interface FinanceDashboardData {
+  period: string;
   total_income: number;
   total_expenses: number;
-  net_savings: number;
+  net_balance: number;
+  savings_percentage: number;
   monthly_budget_target: number;
-  budget_used_percentage: number;
   remaining_budget: number;
+  budget_used_percentage: number;
   is_over_budget: boolean;
   burn_rate_per_day: number;
   projected_month_end_expense: number;
+  active_subscriptions_count: number;
+  monthly_subscription_total: number;
   top_categories: CategorySpend[];
   recent_transactions: TransactionItem[];
+  upcoming_subscriptions: SubscriptionItem[];
+  spending_trends: MonthlyTrendPoint[];
 }
+
+export type FinanceAnalytics = FinanceDashboardData;
+
 
 export interface DocumentItem {
   id: string;
