@@ -547,3 +547,21 @@ export interface DashboardGlance {
   recent_documents: DocumentItem[];
   active_dimensions: string[];
 }
+
+export interface ConversationBrief {
+  id: string;
+  user_id: string;
+  title: string;
+  module_focus: string;
+  message_count: number;
+  created_at: string;
+}
+
+export interface ConversationDetail {
+  id: string;
+  user_id: string;
+  title: string;
+  module_focus: string;
+  created_at: string;
+  messages: ChatMessage[];
+}
