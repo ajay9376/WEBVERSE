@@ -32,5 +32,9 @@ class User(BaseModel):
     subscriptions = relationship("Subscription", back_populates="user", cascade="all, delete-orphan")
     
     documents = relationship("Document", back_populates="user", cascade="all, delete-orphan")
+    life_admin_categories = relationship("LifeAdminCategory", back_populates="user", cascade="all, delete-orphan")
+    bills = relationship("Bill", back_populates="user", cascade="all, delete-orphan")
+    insurance_policies = relationship("InsurancePolicy", back_populates="user", cascade="all, delete-orphan")
+    important_dates = relationship("ImportantDate", back_populates="user", cascade="all, delete-orphan")
     reminders = relationship("Reminder", back_populates="user", cascade="all, delete-orphan")
     conversation_sessions = relationship("ConversationSession", back_populates="user", cascade="all, delete-orphan")

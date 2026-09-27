@@ -28,7 +28,22 @@ from app.models.finance import (
     BillingCycle,
     SubscriptionStatus,
 )
-from app.models.life_admin import Document, Reminder, DocumentCategory, ReminderPriority
+from app.models.life_admin import (
+    Document,
+    LifeAdminCategory,
+    Bill,
+    InsurancePolicy,
+    ImportantDate,
+    Reminder,
+    DocumentCategory,
+    ReminderPriority,
+    ReminderStatus,
+    BillStatus,
+    RecurrencePattern,
+    PolicyType,
+    PremiumFrequency,
+    ImportantDateCategory,
+)
 from app.models.ai import ConversationSession, ChatMessage, SenderRole
 from app.models.vector_embeddings import DocumentChunk
 
@@ -61,9 +76,19 @@ __all__ = [
     "BillingCycle",
     "SubscriptionStatus",
     "Document",
+    "LifeAdminCategory",
+    "Bill",
+    "InsurancePolicy",
+    "ImportantDate",
     "Reminder",
     "DocumentCategory",
     "ReminderPriority",
+    "ReminderStatus",
+    "BillStatus",
+    "RecurrencePattern",
+    "PolicyType",
+    "PremiumFrequency",
+    "ImportantDateCategory",
     "ConversationSession",
     "ChatMessage",
     "SenderRole",
